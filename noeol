@@ -1,0 +1,35 @@
+#!/usr/bin/env perl
+###############################################################################
+##
+# FILE:		noeol
+# PRODUCT:	PreserveNoEOL.vim plugin
+# AUTHOR:	Ingo Karkat <ingo@karkat.de>
+# DATE CREATED:	16-Nov-2011
+#
+###############################################################################
+#
+# COPYRIGHT: (C) 2011-2013 Ingo Karkat
+#   The VIM LICENSE applies to this script; see 'vim -c "help copyright"'.
+#
+# @(#)noeol	1.00.001	(26-Apr-2013)	tools
+###############################################################################
+use autodie qw(open sysseek sysread truncate);
+
+my $file = shift;
+open my $fh, '+>>', $file;
+my $pos = tell $fh;
+$pos > 0 or exit;
+my $len = ($pos >= 2 ? 2 : 1);
+sysseek $fh, $pos - $len, 0;
+sysread $fh, $buf, $len or die 'No data to read?';
+
+if ($buf eq "\r\n") {
+    # print "truncate DOS-style CR-LF\n";
+    truncate $fh, $pos - 2;
+} elsif(substr($buf, -1) eq "\n") {
+    # print "truncate Unix-style LF\n";
+    truncate $fh, $pos - 1;
+} elsif(substr($buf, -1) eq "\r") {
+    # print "truncate Mac-style CR\n";
+    truncate $fh, $pos - 1;
+}

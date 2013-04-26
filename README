@@ -1,0 +1,44 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=4550
+
+DESCRIPTION
+This plugin causes Vim to omit the final newline (<EOL>) at the end of a
+text file when you save it, if it was missing when the file was read. If the
+file was read with <EOL> at the end, it will be saved with one. If it was read
+without one, it will be saved without one.
+
+Some (arguably broken) Windows applications (also several text editors) create
+files without a final <EOL>, so if you have to interoperate with those, or
+want to keep your commits to revision control clean of those changes, this
+plugin is for you.
+
+This works for all three line ending styles which Vim recognizes: DOS
+(Windows), Unix, and traditional Mac. Multiple strategies are implemented to
+handle these cases, so you can choose the one that fits you best.
+
+HOW IT WORKS
+Except for the internal Vimscript implementation, all other strategies first
+let Vim save the file as usual (with a final <EOL>), and then post-process (on
+BufWritePost) the file contents, using file-system API functions to truncate
+the final <EOL>.
+
+RELATED WORKS
+The pure Vimscript implementation is based on the following VimTip:
+    http://vim.wikia.com/wiki/Preserve_missing_end-of-line_at_end_of_text_files
+
+USAGE
+If you always want to preserve a misssing <EOL> in text files, just put
+    :let g:PreserveNoEOL = 1
+into your vimrc and you're done. If you need more fine-grained control or
+want to just turn this on in particular situations, you can use the following
+commands or the buffer-local flag b:PreserveNoEOL.
+
+:PreserveNoEOL          For the current buffer, the 'noeol' setting will be
+                        preserved on writes. (Normally, Vim only does this for
+                        'binary' files.) This has the same effect as setting
+                        the marker buffer variable:
+                            let b:PreserveNoEOL = 1
+
+:SetNoEOL               When writing the current buffer, do not append an
+                        <EOL> at the end of the last line, even when there
+                        used to be one. Same as
+                            setlocal noeol | let b:PreserveNoEOL = 1
