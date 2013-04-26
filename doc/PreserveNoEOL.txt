@@ -123,6 +123,11 @@ preserved on writes.
 You can use this variable in autocmds, filetype plugins or a local vimrc to
 change the behavior for certain file types or files in a particular location.
 
+					     *PreserveNoEOL#Info#IsPreserve()*
+If you want to indicate (e.g. in your 'statusline') that the current file's
+missing EOL will be preserved, you can use the PreserveNoEOL#Info#IsPreserve()
+function, which returns 1 if the plugin will preserve it; 0 otherwise.
+
 ==============================================================================
 LIMITATIONS					   *PreserveNoEOL-limitations*
 
@@ -134,6 +139,9 @@ IDEAS							 *PreserveNoEOL-ideas*
 
 ==============================================================================
 HISTORY						       *PreserveNoEOL-history*
+
+1.01	26-Apr-2013
+In the Python strategy, support traditional Mac (CR) line endings, too.
 
 1.00	26-Apr-2013
 First published version.

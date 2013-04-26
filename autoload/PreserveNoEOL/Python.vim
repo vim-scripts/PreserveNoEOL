@@ -12,6 +12,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.01.004	26-Apr-2013	Support traditional Mac (CR) line endings, too.
 "   1.00.003	26-Apr-2013	Return the potential error message;
 "				PreserveNoEOL#HandleNoEOL will print it.
 "	002	06-Jan-2013	Complete implementation.
@@ -60,6 +61,8 @@ def noeol():
 	if last_line.endswith("\r\n"):
 	    trunc(file, end_pos)
 	elif last_line.endswith("\n"):
+	    trunc(file, end_pos + 1)
+	elif last_line.endswith("\r"):
 	    trunc(file, end_pos + 1)
     except Exception as e:
 	vim.command("let python_errmsg = '%s'" % str(e).replace("'", "''"))
